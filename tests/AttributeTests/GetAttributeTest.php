@@ -14,6 +14,12 @@ class GetAttributeTest extends TestCase
 
         $this
             ->assertRegisteredRoutesCount(1)
-            ->assertRouteRegistered(GetTestController::class, 'myGetMethod', 'get', 'my-get-method');
+            ->assertRouteRegistered(
+                GetTestController::class,
+                'myGetMethod',
+                'get',
+                'my-get-method',
+                ["Bfg\Route\Tests\TestClasses\middleware\AnotherTestmiddleware"]
+            );
     }
 }

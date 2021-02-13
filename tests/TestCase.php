@@ -19,12 +19,17 @@ class TestCase extends Orchestra
     {
         parent::setUp();
 
-        $router = app()->router;
+//        $this->routeRegistrar = (new RouteRegistrar($router))
+//            ->useBasePath($this->getTestPath())
+//            ->useMiddleware([AnotherTestmiddleware::class])
+//            ->useRootNamespace('Bfg\Route\Tests\\');
 
-        $this->routeRegistrar = (new RouteRegistrar($router))
-            ->useBasePath($this->getTestPath())
-            ->useMiddleware([AnotherTestmiddleware::class])
-            ->useRootNamespace('Bfg\Route\Tests\\');
+        $this->routeRegistrar = new RouteRegistrar(
+            app()->router
+                ->prefix($this->getTestPath())
+                ->namespace('Bfg\Route\Tests\\')
+                ->middleware([AnotherTestmiddleware::class])
+        );
     }
 
     protected function getPackageProviders($app)
@@ -54,20 +59,27 @@ class TestCase extends Orchestra
         string $httpMethod = 'get',
         string $uri = 'my-method',
         string|array $middleware = [],
-        ?string $name = null,
-        ?string $domain = null,
+        string $name = null,
+        string $domain = null,
+        bool $dump = false,
     ): self {
         if (! is_array($middleware)) {
             $middleware = Arr::wrap($middleware);
         }
 
         $routeRegistered = collect($this->getRouteCollection()->getRoutes())
-            ->contains(function (Route $route) use ($name, $middleware, $controllerMethod, $controller, $uri, $httpMethod, $domain) {
+            ->contains(function (Route $route) use ($name, $middleware, $controllerMethod, $controller, $uri, $httpMethod, $domain, $dump) {
+
+                if ($name === null) {
+
+                    $name = RouteRegistrar::generate_name($uri);
+                }
+
                 if (! in_array(strtoupper($httpMethod), $route->methods)) {
                     return false;
                 }
 
-                if ($route->uri() !== $uri) {
+                if (str_replace(trim(__DIR__, '/') . '/', '', $route->uri()) !== $uri) {
                     return false;
                 }
 
@@ -79,7 +91,7 @@ class TestCase extends Orchestra
                     return false;
                 }
 
-                if (array_diff($route->middleware(), array_merge($middleware, $this->routeRegistrar->middleware()))) {
+                if (array_diff($route->middleware(), $middleware)) {
                     return false;
                 }
 

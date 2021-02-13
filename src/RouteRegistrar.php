@@ -4,7 +4,6 @@ namespace Bfg\Route;
 
 use Illuminate\Routing\Router;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 use ReflectionAttribute;
 use ReflectionClass;
 use Bfg\Route\Attributes\Route;
@@ -13,50 +12,30 @@ use SplFileInfo;
 use Symfony\Component\Finder\Finder;
 use Throwable;
 
+/**
+ * Class RouteRegistrar
+ * @package Bfg\Route
+ */
 class RouteRegistrar
 {
-    private Router $router;
+    /**
+     * @var \Illuminate\Routing\Route|\Illuminate\Routing\RouteRegistrar
+     */
+    public $route;
 
-    protected string $basePath;
+    /**
+     * RouteRegistrar constructor.
+     * @param  \Illuminate\Routing\Route|\Illuminate\Routing\RouteRegistrar  $router
+     */
+    public function __construct(
+        private $router
+    ) {}
 
-    protected string $rootNamespace;
-
-    protected array $middleware = [];
-
-    public function __construct(Router $router)
-    {
-        $this->router = $router;
-
-        $this->basePath = app()->path();
-    }
-
-    public function useBasePath(string $basePath): self
-    {
-        $this->basePath = $basePath;
-
-        return $this;
-    }
-
-    public function useRootNamespace(string $rootNamespace): self
-    {
-        $this->rootNamespace = $rootNamespace;
-
-        return $this;
-    }
-
-    public function useMiddleware(string|array $middleware): self
-    {
-        $this->middleware =  Arr::wrap($middleware);
-
-        return $this;
-    }
-
-    public function middleware(): array
-    {
-        return $this->middleware ?? [];
-    }
-
-
+    /**
+     * Register directory/s witch controller classes
+     * @param  string|array  $directories
+     * @throws \ReflectionException
+     */
     public function registerDirectory(string|array $directories): void
     {
         $directories = Arr::wrap($directories);
@@ -66,39 +45,33 @@ class RouteRegistrar
         collect($files)->each(fn(SplFileInfo $file) => $this->registerFile($file));
     }
 
+    /**
+     * Register controller file
+     * @param  string|SplFileInfo  $path
+     * @throws \ReflectionException
+     */
     public function registerFile(string|SplFileInfo $path): void
     {
         if (is_string($path)) {
             $path = new SplFileInfo($path);
         }
 
-        $fullyQualifiedClassName = $this->fullQualifiedClassNameFromFile($path);
+        if (\Str::is('*.php', $path->getRealPath())) {
 
-        $this->processAttributes($fullyQualifiedClassName);
+            $this->registerClass(
+                class_in_file($path->getRealPath())
+            );
+        }
     }
 
-    public function registerClass(string $class): void
+    /**
+     * Register controller class
+     * @param  string|null  $className
+     * @throws \ReflectionException
+     */
+    public function registerClass(string $className = null): void
     {
-        $this->processAttributes($class);
-    }
-
-
-    protected function fullQualifiedClassNameFromFile(SplFileInfo $file): string
-    {
-        $class = trim(Str::replaceFirst($this->basePath, '', $file->getRealPath()), DIRECTORY_SEPARATOR);
-
-        $class = str_replace(
-            [DIRECTORY_SEPARATOR, 'App\\'],
-            ['\\', app()->getNamespace()],
-            ucfirst(Str::replaceLast('.php', '', $class))
-        );
-
-        return $this->rootNamespace . $class;
-    }
-
-    protected function processAttributes(string $className): void
-    {
-        if (!class_exists($className)) {
+        if (!$className || !class_exists($className)) {
             return;
         }
 
@@ -107,6 +80,7 @@ class RouteRegistrar
         $classRouteAttributes = new ClassRouteAttributes($class);
 
         foreach ($class->getMethods() as $method) {
+
             $attributes = $method->getAttributes(RouteAttribute::class, ReflectionAttribute::IS_INSTANCEOF);
 
             foreach ($attributes as $attribute) {
@@ -120,30 +94,63 @@ class RouteRegistrar
                     continue;
                 }
 
-                $httpMethod = $attributeClass->method;
-
                 $action = $attributeClass->method === '__invoke'
                     ? $class->getName()
                     : [$class->getName(), $method->getName()];
 
-                /** @var \Illuminate\Routing\Route $route */
-                $route = $this->router->$httpMethod($attributeClass->uri, $action);
+                if ($attributeClass->method == 'any') {
 
-                $route
-                    ->name($attributeClass->name);
+                    /** @var \Illuminate\Routing\Route $route */
+                    $route = $this->router->any(
+                        $attributeClass->uri,
+                        $action
+                    );
+                }
+
+                else {
+
+                    /** @var \Illuminate\Routing\Route $route */
+                    $route = $this->router->match(
+                        \Arr::wrap($attributeClass->method),
+                        $attributeClass->uri,
+                        $action
+                    );
+                }
+
+                $route->name(static::generate_name($attributeClass->uri, $attributeClass->name));
 
                 if ($domain = $classRouteAttributes->domain()) {
+
                     $route->domain($domain);
                 }
 
                 if ($prefix = $classRouteAttributes->prefix()) {
+
                     $route->prefix($prefix);
                 }
 
-                $classMiddleware = $classRouteAttributes->middleware();
-                $methodMiddleware = $attributeClass->middleware;
-                $route->middleware([...$classMiddleware, ...$methodMiddleware, ...$this->middleware]);
+                $route->middleware([
+                    ...$classRouteAttributes->middleware(),
+                    ...$attributeClass->middleware
+                ]);
+
+                $this->route = $route;
             }
         }
+    }
+
+    /**
+     * Name generator
+     * @param  string  $uri
+     * @param  string|null  $name
+     * @return string
+     */
+    public static function generate_name(string $uri, string $name = null)
+    {
+        return trim(
+            ($name ? $name :
+                (\Str::slug(str_replace('/', '.', $uri), '.') ?: 'home')),
+            '.'
+        );
     }
 }

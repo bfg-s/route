@@ -18,6 +18,7 @@ class DomainAttributeTest extends TestCase
                 DomainTestController::class,
                 controllerMethod: 'myGetMethod',
                 uri: 'my-get-method',
+                middleware: ["Bfg\Route\Tests\TestClasses\middleware\AnotherTestmiddleware"],
                 domain: 'my-subdomain.localhost'
             )
             ->assertRouteRegistered(
@@ -25,6 +26,7 @@ class DomainAttributeTest extends TestCase
                 controllerMethod: 'myPostMethod',
                 httpMethod: 'post',
                 uri: 'my-post-method',
+                middleware: ["Bfg\Route\Tests\TestClasses\middleware\AnotherTestmiddleware"],
                 domain: 'my-subdomain.localhost'
             );
     }

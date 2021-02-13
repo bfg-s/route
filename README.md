@@ -1,8 +1,8 @@
 # Use PHP 8 attributes to register routes in a Laravel app
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/laravel-route-attributes.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-route-attributes)
-![Tests](https://github.com/spatie/laravel-route-attributes/workflows/Tests/badge.svg)
-[![Type Coverage](https://shepherd.dev/github/spatie/laravel-route-attributes/coverage.svg)](https://shepherd.dev/github/spatie/laravel-route-attributes)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/bfg-s/route.svg?style=flat-square)](https://packagist.org/packages/bfg-s/route)
+![Tests](https://github.com/bfg-s/route/workflows/Tests/badge.svg)
+[![Type Coverage](https://shepherd.dev/github/bfg-s/route/coverage.svg)](https://shepherd.dev/github/bfg-s/route)
 
 This package provides annotations to automatically register routes. Here's a quick example:
 
@@ -25,51 +25,38 @@ This attribute will automatically register this route:
 Route::get('my-route', [MyController::class, 'myMethod']);
 ```
 
-## Are you a visual learner?
-
-[In this video](https://spatie.be/videos/front-line-php/adding-meta-data-using-attributes) you'll get an introduction to PHP 8 attributes and how this laravel-routes-attributes works under the hood.
-
-## Support us
-
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/laravel-route-attributes.jpg?t=2" width="419px" />](https://spatie.be/github-ad-click/laravel-route-attributes)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
-
 ## Installation
 
 You can install the package via composer:
 
 ```bash
-composer require spatie/laravel-route-attributes
-```
-
-You can publish the config file with:
-```bash
-php artisan vendor:publish --provider="Bfg\Route\RouteServiceProvider" --tag="config"
-```
-
-This is the contents of the published config file:
-
-```php
-return [
-    /*
-     *  Automatic registration of routes will only happen if this setting is `true`
-     */
-    'enabled' => true,
-
-    /*
-     * Controllers in these directories that have routing attributes
-     * will automatically be registered.
-     */
-    'directories' => [
-        app_path('Http/Controllers'),
-    ],
-];
+composer require bfg/route
 ```
 
 ## Usage
+
+In your `RouteServiceProvider`, delete where your controllers are located and he will do the rest for you:
+```php
+public function boot()
+{
+    $this->configureRateLimiting();
+
+    $this->routes(function () {
+
+        Route::find(
+            // Path for search attributes,
+            // you can use class namespaces,
+            // directories and file paths
+            __DIR__ . '/../Http/Controllers',
+            
+            // Here you can transfer the parent
+            // instance of the route from which
+            // the nesting will be created.
+            Route::middleware('web')
+        );
+    });
+}
+```
 
 The package provides several annotations that should be put on controller classes and methods. These annotations will be used to automatically register routes
 
@@ -245,25 +232,10 @@ Route::post('my-post-route', [MyController::class, 'myPostMethod'])->domain('my-
 ## Testing
 
 ``` bash
+cd vendor/bfg/route
+composer install
 composer test
 ```
-
-## Changelog
-
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
-
-## Contributing
-
-Please see [CONTRIBUTING](.github/CONTRIBUTING.md) for details.
-
-## Security Vulnerabilities
-
-Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
-
-## Credits
-
-- [Freek Van der Herten](https://github.com/freekmurze)
-- [All Contributors](../../contributors)
 
 ## License
 

@@ -14,6 +14,12 @@ class DeleteAttributeTest extends TestCase
 
         $this
             ->assertRegisteredRoutesCount(1)
-            ->assertRouteRegistered(DeleteTestController::class, 'myDeleteMethod', 'delete', 'my-delete-method');
+            ->assertRouteRegistered(
+                DeleteTestController::class,
+                'myDeleteMethod',
+                'delete',
+                'my-delete-method',
+                ["Bfg\Route\Tests\TestClasses\middleware\AnotherTestmiddleware"]
+            );
     }
 }

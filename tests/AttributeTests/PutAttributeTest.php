@@ -14,6 +14,12 @@ class PutAttributeTest extends TestCase
 
         $this
             ->assertRegisteredRoutesCount(1)
-            ->assertRouteRegistered(PutTestController::class, 'myPutMethod', 'put', 'my-put-method');
+            ->assertRouteRegistered(
+                PutTestController::class,
+                'myPutMethod',
+                'put',
+                'my-put-method',
+                ["Bfg\Route\Tests\TestClasses\middleware\AnotherTestmiddleware"]
+            );
     }
 }

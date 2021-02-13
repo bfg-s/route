@@ -3,7 +3,10 @@
     "description": "Auto register routes using PHP attributes",
     "keywords": [
         "spatie",
-        "laravel-route-attributes"
+        "laravel",
+        "bfg",
+        "route",
+        "attributes"
     ],
     "homepage": "https://github.com/bfg/route",
     "license": "MIT",
@@ -15,6 +18,7 @@
     ],
     "require": {
         "php": "^8.0",
+        "bfg/entity": "^1.0.7",
         "illuminate/contracts": "^8.0"
     },
     "require-dev": {
@@ -23,7 +27,6 @@
         "psalm/plugin-laravel": "^1.4",
         "vimeo/psalm": "^4.1"
     },
-
     "autoload": {
         "psr-4": {
             "Bfg\\Route\\": "src"
@@ -46,7 +49,10 @@
         "laravel": {
             "providers": [
                 "Bfg\\Route\\RouteServiceProvider"
-            ]
+            ],
+            "aliases": {
+                "BfgRoute": "Bfg\\Route\\Facade"
+            }
         }
     },
     "minimum-stability": "dev",

@@ -22,7 +22,13 @@ class RouteAttributeTest extends TestCase
 
         $this
             ->assertRegisteredRoutesCount(1)
-            ->assertRouteRegistered(RouteGetTestController::class, 'myGetMethod', 'get', 'my-get-method');
+            ->assertRouteRegistered(
+                RouteGetTestController::class,
+                'myGetMethod',
+                'get',
+                'my-get-method',
+                ["Bfg\Route\Tests\TestClasses\middleware\AnotherTestmiddleware"]
+            );
     }
 
     /** @test */
@@ -32,7 +38,13 @@ class RouteAttributeTest extends TestCase
 
         $this
             ->assertRegisteredRoutesCount(1)
-            ->assertRouteRegistered(RoutePostTestController::class, 'myPostMethod', 'post', 'my-post-method');
+            ->assertRouteRegistered(
+                RoutePostTestController::class,
+                'myPostMethod',
+                'post',
+                'my-post-method',
+                ["Bfg\Route\Tests\TestClasses\middleware\AnotherTestmiddleware"]
+            );
     }
 
     /** @test */
@@ -42,7 +54,7 @@ class RouteAttributeTest extends TestCase
 
         $this->assertRouteRegistered(
             controller: RoutemiddlewareTestController::class,
-            middleware: Testmiddleware::class,
+            middleware: [Testmiddleware::class, "Bfg\Route\Tests\TestClasses\middleware\AnotherTestmiddleware"],
         );
     }
 
@@ -53,7 +65,8 @@ class RouteAttributeTest extends TestCase
 
         $this->assertRouteRegistered(
             controller: RouteNameTestController::class,
-            name: 'test-name',
+            middleware: ["Bfg\Route\Tests\TestClasses\middleware\AnotherTestmiddleware"],
+            name: 'test-name'
         );
     }
 
@@ -67,7 +80,8 @@ class RouteAttributeTest extends TestCase
             ->assertRouteRegistered(
             controller: InvokableRouteGetTestController::class,
             controllerMethod: '__invoke',
-            uri: 'my-invokable-route'
+            uri: 'my-invokable-route',
+            middleware: ["Bfg\Route\Tests\TestClasses\middleware\AnotherTestmiddleware"]
         );
     }
 }

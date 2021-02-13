@@ -2,9 +2,10 @@
 
 namespace Bfg\Route\Core;
 
-use Bfg\Layout\Middleware\LayoutMiddleware;
-use Bfg\Route\RouteRegistrar;
+use Bfg\Route\BfgRoute;
+use Illuminate\Routing\Route;
 use Illuminate\Routing\Router;
+use Illuminate\Routing\RouteRegistrar as RouteRegistrarIlluminate;
 
 /**
  * Class RouteMixin
@@ -17,14 +18,11 @@ class RouteMixin
      * Attributable routs
      * @return \Closure
      */
-    public function attributes() : \Closure
+    public function find() : \Closure
     {
-        return function (string $dir) {
-
-            $routeRegistrar = (new RouteRegistrar($this))
-                ->useRootNamespace(app()->getNamespace());
-
-            $routeRegistrar->registerDirectory($dir);
+        return function (string $dir, Route|RouteRegistrarIlluminate $router = null) {
+            /** @var Router $this */
+            return (new BfgRoute($this))->find($dir, $router);
         };
     }
 }

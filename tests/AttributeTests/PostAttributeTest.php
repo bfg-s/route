@@ -14,6 +14,12 @@ class PostAttributeTest extends TestCase
 
         $this
             ->assertRegisteredRoutesCount(1)
-            ->assertRouteRegistered(PostTestController::class, 'myPostMethod', 'post', 'my-post-method');
+            ->assertRouteRegistered(
+                PostTestController::class,
+                'myPostMethod',
+                'post',
+                'my-post-method',
+                ["Bfg\Route\Tests\TestClasses\middleware\AnotherTestmiddleware"]
+            );
     }
 }

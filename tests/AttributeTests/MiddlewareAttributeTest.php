@@ -20,13 +20,13 @@ class middlewareAttributeTest extends TestCase
                 middlewareTestController::class,
                 controllerMethod: 'singlemiddleware',
                 uri: 'single-middleware',
-                middleware: [Testmiddleware::class],
+                middleware: ["Bfg\Route\Tests\TestClasses\middleware\AnotherTestmiddleware", Testmiddleware::class],
             )
             ->assertRouteRegistered(
                 middlewareTestController::class,
                 controllerMethod: 'multiplemiddleware',
                 uri: 'multiple-middleware',
-                middleware: [Testmiddleware::class, OtherTestmiddleware::class],
+                middleware: ["Bfg\Route\Tests\TestClasses\middleware\AnotherTestmiddleware", Testmiddleware::class, OtherTestmiddleware::class],
             );
     }
 }

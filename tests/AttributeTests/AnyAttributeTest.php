@@ -12,14 +12,18 @@ class AnyAttributeTest extends TestCase
     {
         $this->routeRegistrar->registerClass(AnyTestController::class);
 
+        $middleware = [
+            "Bfg\Route\Tests\TestClasses\middleware\AnotherTestmiddleware"
+        ];
+
         $this
             ->assertRegisteredRoutesCount(1)
-            ->assertRouteRegistered(AnyTestController::class, 'myAnyMethod', 'head', 'my-any-method')
-            ->assertRouteRegistered(AnyTestController::class, 'myAnyMethod', 'get', 'my-any-method')
-            ->assertRouteRegistered(AnyTestController::class, 'myAnyMethod', 'post', 'my-any-method')
-            ->assertRouteRegistered(AnyTestController::class, 'myAnyMethod', 'put', 'my-any-method')
-            ->assertRouteRegistered(AnyTestController::class, 'myAnyMethod', 'patch', 'my-any-method')
-            ->assertRouteRegistered(AnyTestController::class, 'myAnyMethod', 'delete', 'my-any-method')
-            ->assertRouteRegistered(AnyTestController::class, 'myAnyMethod', 'options', 'my-any-method');
+            ->assertRouteRegistered(AnyTestController::class, 'myAnyMethod', 'head', 'my-any-method', $middleware)
+            ->assertRouteRegistered(AnyTestController::class, 'myAnyMethod', 'get', 'my-any-method', $middleware)
+            ->assertRouteRegistered(AnyTestController::class, 'myAnyMethod', 'post', 'my-any-method', $middleware)
+            ->assertRouteRegistered(AnyTestController::class, 'myAnyMethod', 'put', 'my-any-method', $middleware)
+            ->assertRouteRegistered(AnyTestController::class, 'myAnyMethod', 'patch', 'my-any-method', $middleware)
+            ->assertRouteRegistered(AnyTestController::class, 'myAnyMethod', 'delete', 'my-any-method', $middleware)
+            ->assertRouteRegistered(AnyTestController::class, 'myAnyMethod', 'options', 'my-any-method', $middleware);
     }
 }

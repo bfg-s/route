@@ -14,6 +14,12 @@ class PatchAttributeTest extends TestCase
 
         $this
             ->assertRegisteredRoutesCount(1)
-            ->assertRouteRegistered(PatchTestController::class, 'myPatchMethod', 'patch', 'my-patch-method');
+            ->assertRouteRegistered(
+                PatchTestController::class,
+                'myPatchMethod',
+                'patch',
+                'my-patch-method',
+                ["Bfg\Route\Tests\TestClasses\middleware\AnotherTestmiddleware"]
+            );
     }
 }

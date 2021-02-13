@@ -14,6 +14,12 @@ class OptionsAttributeTest extends TestCase
 
         $this
             ->assertRegisteredRoutesCount(1)
-            ->assertRouteRegistered(OptionsTestController::class, 'myOptionsMethod', 'options', 'my-options-method');
+            ->assertRouteRegistered(
+                OptionsTestController::class,
+                'myOptionsMethod',
+                'options',
+                'my-options-method',
+                ["Bfg\Route\Tests\TestClasses\middleware\AnotherTestmiddleware"]
+            );
     }
 }

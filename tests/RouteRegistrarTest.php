@@ -21,6 +21,7 @@ class RouteRegistrarTest extends TestCase
         $this->assertRouteRegistered(
             RegistrarTestFirstController::class,
             uri: 'first-method',
+            middleware: ["Bfg\Route\Tests\TestClasses\middleware\AnotherTestmiddleware"]
         );
     }
 
@@ -35,7 +36,8 @@ class RouteRegistrarTest extends TestCase
 
         $this->assertRouteRegistered(
             RegistrarTestFirstController::class,
-            uri: 'first-method',middleware: [AnotherTestmiddleware::class]
+            uri: 'first-method',
+            middleware: [AnotherTestmiddleware::class]
 
         );
     }
@@ -52,16 +54,19 @@ class RouteRegistrarTest extends TestCase
         $this->assertRouteRegistered(
             RegistrarTestFirstController::class,
             uri: 'first-method',
+            middleware: ["Bfg\Route\Tests\TestClasses\middleware\AnotherTestmiddleware"]
         );
 
         $this->assertRouteRegistered(
             RegistrarTestSecondController::class,
             uri: 'second-method',
+            middleware: ["Bfg\Route\Tests\TestClasses\middleware\AnotherTestmiddleware"]
         );
 
         $this->assertRouteRegistered(
             RegistrarTestControllerInSubDirectory::class,
             uri: 'in-sub-directory',
+            middleware: ["Bfg\Route\Tests\TestClasses\middleware\AnotherTestmiddleware"]
         );
     }
 }

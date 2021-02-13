@@ -18,12 +18,16 @@ class PrefixAttributeTest extends TestCase
                 PrefixTestController::class,
                 controllerMethod: 'myGetMethod',
                 uri: 'my-prefix/my-get-method',
+                middleware: ["Bfg\Route\Tests\TestClasses\middleware\AnotherTestmiddleware"],
+                name: 'my.get.method',
             )
             ->assertRouteRegistered(
                 PrefixTestController::class,
                 controllerMethod: 'myPostMethod',
                 httpMethod: 'post',
                 uri: 'my-prefix/my-post-method',
+                middleware: ["Bfg\Route\Tests\TestClasses\middleware\AnotherTestmiddleware"],
+                name: 'my.post.method',
             );
     }
 }

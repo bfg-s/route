@@ -8,17 +8,28 @@ use Bfg\Route\Attributes\Middleware;
 use Bfg\Route\Attributes\Prefix;
 use Bfg\Route\Attributes\RouteAttribute;
 
+/**
+ * Class ClassRouteAttributes
+ * @package Bfg\Route
+ */
 class ClassRouteAttributes
 {
+    /**
+     * @var ReflectionClass
+     */
     private ReflectionClass $class;
 
+    /**
+     * ClassRouteAttributes constructor.
+     * @param  ReflectionClass  $class
+     */
     public function __construct(ReflectionClass $class)
     {
         $this->class = $class;
     }
 
     /**
-     * @psalm-suppress NoInterfaceProperties
+     * @return string|null
      */
     public function prefix(): ?string
     {
@@ -31,7 +42,7 @@ class ClassRouteAttributes
     }
 
     /**
-     * @psalm-suppress NoInterfaceProperties
+     * @return string|null
      */
     public function domain(): ?string
     {
@@ -44,7 +55,7 @@ class ClassRouteAttributes
     }
 
     /**
-     * @psalm-suppress NoInterfaceProperties
+     * @return array
      */
     public function middleware(): array
     {
@@ -56,6 +67,11 @@ class ClassRouteAttributes
         return $attribute->middleware;
     }
 
+
+    /**
+     * @param  string  $attributeClass
+     * @return RouteAttribute|null
+     */
     protected function getAttribute(string $attributeClass): ?RouteAttribute
     {
         $attributes = $this->class->getAttributes($attributeClass);
