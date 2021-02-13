@@ -1,8 +1,6 @@
 # Use PHP 8 attributes to register routes in a Laravel app
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/bfg/route.svg?style=flat-square)](https://packagist.org/packages/bfg-s/route)
-![Tests](https://github.com/bfg-s/route/workflows/Tests/badge.svg)
-[![Type Coverage](https://shepherd.dev/github/bfg-s/route/coverage.svg)](https://shepherd.dev/github/bfg-s/route)
 
 This package provides annotations to automatically register routes. Here's a quick example:
 
