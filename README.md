@@ -227,6 +227,13 @@ Route::get('my-get-route', [MyController::class, 'myGetMethod'])->domain('my-sub
 Route::post('my-post-route', [MyController::class, 'myPostMethod'])->domain('my-subdomain.localhost');
 ```
 
+## Deployment
+As stated in the documentation which you can see [here](https://laravel.com/docs/8.x/deployment#optimizing-route-loading). After you cache your routes ...
+```bash
+php artisan route:cache
+```
+... scanning of your classes will be disabled.
+
 ## Testing
 
 ``` bash
