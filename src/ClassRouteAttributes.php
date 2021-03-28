@@ -2,6 +2,7 @@
 
 namespace Bfg\Route;
 
+use Bfg\Route\Attributes\Invokable;
 use ReflectionClass;
 use Bfg\Route\Attributes\Domain;
 use Bfg\Route\Attributes\Middleware;
@@ -65,6 +66,19 @@ class ClassRouteAttributes
         }
 
         return $attribute->middleware;
+    }
+
+    /**
+     * @return Invokable|false
+     */
+    public function invokable()
+    {
+        /** @var \Bfg\Route\Attributes\Invokable $attribute */
+        if (! $attribute = $this->getAttribute(Invokable::class)) {
+            return false;
+        }
+
+        return $attribute;
     }
 
 

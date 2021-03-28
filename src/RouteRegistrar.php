@@ -2,7 +2,7 @@
 
 namespace Bfg\Route;
 
-use Illuminate\Routing\Router;
+use Bfg\Route\Core\ClassGetter;
 use Illuminate\Support\Arr;
 use ReflectionAttribute;
 use ReflectionClass;
@@ -59,7 +59,7 @@ class RouteRegistrar
         if (\Str::is('*.php', $path->getRealPath())) {
 
             $this->registerClass(
-                class_in_file($path->getRealPath())
+                (new ClassGetter())->getClassFullNameFromFile($path->getRealPath())
             );
         }
     }
@@ -79,64 +79,79 @@ class RouteRegistrar
 
         $classRouteAttributes = new ClassRouteAttributes($class);
 
-        foreach ($class->getMethods() as $method) {
+        if ($invokable_data = $classRouteAttributes->invokable()) {
 
-            $attributes = $method->getAttributes(RouteAttribute::class, ReflectionAttribute::IS_INSTANCEOF);
+            $this->router->match(
+                Arr::wrap($invokable_data->method),
+                $invokable_data->uri,
+                $invokable_data->responsible ? [$className, $invokable_data->responsible] :
+                    $className
+            )->middleware($invokable_data->middleware)
+                ->name(static::generate_name($invokable_data->uri, $invokable_data->name));
+        }
 
-            foreach ($attributes as $attribute) {
-                try {
-                    $attributeClass = $attribute->newInstance();
-                } catch (Throwable) {
-                    continue;
+        else {
+
+            foreach ($class->getMethods() as $method) {
+
+                $attributes = $method->getAttributes(RouteAttribute::class, ReflectionAttribute::IS_INSTANCEOF);
+
+                foreach ($attributes as $attribute) {
+                    try {
+                        $attributeClass = $attribute->newInstance();
+                    } catch (Throwable) {
+                        continue;
+                    }
+
+                    if (!$attributeClass instanceof Route) {
+                        continue;
+                    }
+
+                    $action = $attributeClass->method === '__invoke'
+                        ? $class->getName()
+                        : [$class->getName(), $method->getName()];
+
+                    if ($attributeClass->method == 'any') {
+
+                        /** @var \Illuminate\Routing\Route $route */
+                        $route = $this->router->any(
+                            $attributeClass->uri,
+                            $action
+                        );
+                    }
+
+                    else {
+
+                        /** @var \Illuminate\Routing\Route $route */
+                        $route = $this->router->match(
+                            \Arr::wrap($attributeClass->method),
+                            $attributeClass->uri,
+                            $action
+                        );
+                    }
+
+                    $route->name(static::generate_name($attributeClass->uri, $attributeClass->name));
+
+                    if ($domain = $classRouteAttributes->domain()) {
+
+                        $route->domain($domain);
+                    }
+
+                    if ($prefix = $classRouteAttributes->prefix()) {
+
+                        $route->prefix($prefix);
+                    }
+
+                    $route->middleware([
+                        ...$classRouteAttributes->middleware(),
+                        ...$attributeClass->middleware
+                    ]);
+
+                    $this->route = $route;
                 }
-
-                if (!$attributeClass instanceof Route) {
-                    continue;
-                }
-
-                $action = $attributeClass->method === '__invoke'
-                    ? $class->getName()
-                    : [$class->getName(), $method->getName()];
-
-                if ($attributeClass->method == 'any') {
-
-                    /** @var \Illuminate\Routing\Route $route */
-                    $route = $this->router->any(
-                        $attributeClass->uri,
-                        $action
-                    );
-                }
-
-                else {
-
-                    /** @var \Illuminate\Routing\Route $route */
-                    $route = $this->router->match(
-                        \Arr::wrap($attributeClass->method),
-                        $attributeClass->uri,
-                        $action
-                    );
-                }
-
-                $route->name(static::generate_name($attributeClass->uri, $attributeClass->name));
-
-                if ($domain = $classRouteAttributes->domain()) {
-
-                    $route->domain($domain);
-                }
-
-                if ($prefix = $classRouteAttributes->prefix()) {
-
-                    $route->prefix($prefix);
-                }
-
-                $route->middleware([
-                    ...$classRouteAttributes->middleware(),
-                    ...$attributeClass->middleware
-                ]);
-
-                $this->route = $route;
             }
         }
+
     }
 
     /**

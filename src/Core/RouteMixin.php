@@ -20,7 +20,12 @@ class RouteMixin
      */
     public function find() : \Closure
     {
-        return function (string $dir, Route|RouteRegistrarIlluminate $router = null) {
+        /**
+         * @param $dir
+         * @param  Route|RouteRegistrarIlluminate  $router
+         * @return Route|RouteRegistrarIlluminate
+         */
+        return function ($dir, $router = null) {
             /** @var Router $this */
             return (new BfgRoute($this))->find($dir, $router);
         };

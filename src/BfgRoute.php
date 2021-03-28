@@ -22,26 +22,37 @@ class BfgRoute
      * @throws \ReflectionException
      */
     public function find(
-        string $path,
+        string|array $path,
         \Illuminate\Routing\Route|\Illuminate\Routing\RouteRegistrar $registrar = null
     ) {
         $routeRegistrar = (new RouteRegistrar($registrar ?? $this->router));
 
         if (RouteServiceProvider::isEnabled()) {
 
-            if (is_dir($path)) {
+            if (is_array($path)) {
 
-                $routeRegistrar->registerDirectory($path);
+                foreach ($path as $item) {
+
+                    $this->find($item, $registrar ?? $this->router);
+                }
             }
 
-            else if (is_file($path)) {
+            else {
 
-                $routeRegistrar->registerFile($path);
-            }
+                if (is_dir($path)) {
 
-            else if (class_exists($path)) {
+                    $routeRegistrar->registerDirectory($path);
+                }
 
-                $routeRegistrar->registerClass($path);
+                else if (is_file($path)) {
+
+                    $routeRegistrar->registerFile($path);
+                }
+
+                else if (class_exists($path)) {
+
+                    $routeRegistrar->registerClass($path);
+                }
             }
         }
 
