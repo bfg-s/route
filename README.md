@@ -242,6 +242,12 @@ composer install
 composer test
 ```
 
+## Inspired by
+I took [this](https://github.com/spatie/laravel-route-attributes) package into 
+the service and reworked it a little, added a couple of functions, caching and 
+added the ability to extend it a little, I plan to support a more advanced API 
+as far as possible.
+
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
