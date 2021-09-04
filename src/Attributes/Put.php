@@ -21,12 +21,14 @@ class Put extends Route
         string $uri,
         ?string $name = null,
         array|string $middleware = [],
+        array $where = null,
     ) {
         parent::__construct(
             method: 'put',
             uri: $uri,
             name: $name,
             middleware: $middleware,
+            where: $where
         );
     }
 }

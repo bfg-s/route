@@ -88,7 +88,7 @@ class ClassRouteAttributes
      */
     protected function getAttribute(string $attributeClass): ?RouteAttribute
     {
-        $attributes = $this->class->getAttributes($attributeClass);
+        $attributes = $this->class->getAttributes($attributeClass, \ReflectionAttribute::IS_INSTANCEOF);
 
         if (! count($attributes)) {
             return null;

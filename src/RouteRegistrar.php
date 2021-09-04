@@ -81,13 +81,25 @@ class RouteRegistrar
 
         if ($invokable_data = $classRouteAttributes->invokable()) {
 
-            $this->router->match(
+            $uri = $invokable_data->uri;
+
+            if ($uri) {
+
+                $uri = str_replace("[class_name]", \Str::snake(class_basename($className)), $uri);
+            }
+
+            $ir = $this->router->match(
                 Arr::wrap($invokable_data->method),
-                $invokable_data->uri,
+                $uri,
                 $invokable_data->responsible ? [$className, $invokable_data->responsible] :
                     $className
             )->middleware($invokable_data->middleware)
                 ->name(static::generate_name($invokable_data->uri, $invokable_data->name));
+
+            if ($invokable_data->where) {
+
+                $ir->where(...$invokable_data->where);
+            }
         }
 
         else {
@@ -140,6 +152,11 @@ class RouteRegistrar
                     if ($prefix = $classRouteAttributes->prefix()) {
 
                         $route->prefix($prefix);
+                    }
+
+                    if ($attributeClass->where) {
+
+                        $route->where(...$attributeClass->where);
                     }
 
                     $route->middleware([

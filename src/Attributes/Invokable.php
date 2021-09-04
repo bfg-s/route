@@ -24,6 +24,7 @@ class Invokable implements RouteAttribute
      * @param  string|null  $name
      * @param  string|null  $responsible
      * @param  array|string  $middleware
+     * @param  array|null  $where
      */
     public function __construct(
         public string $uri,
@@ -31,6 +32,7 @@ class Invokable implements RouteAttribute
         public ?string $name = null,
         public ?string $responsible = null,
         array|string $middleware = [],
+        public ?array $where = null,
     ) {
         $this->middleware = Arr::wrap($middleware);
     }

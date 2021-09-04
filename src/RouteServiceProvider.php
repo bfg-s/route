@@ -20,12 +20,6 @@ class RouteServiceProvider extends InstalledProvider
     protected static bool $enabled = false;
 
     /**
-     * The description of extension.
-     * @var string|null
-     */
-    public ?string $description = "PHP 8 attributes to register routes in a Laravel";
-
-    /**
      * Set as installed by default.
      * @var bool
      */

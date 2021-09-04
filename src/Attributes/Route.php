@@ -18,18 +18,26 @@ class Route implements RouteAttribute
     public array $middleware;
 
     /**
+     * @var array
+     */
+    public ?array $where;
+
+    /**
      * Route constructor.
      * @param  string|array  $method
      * @param  string  $uri
      * @param  string|null  $name
      * @param  array|string  $middleware
+     * @param  array|null  $where
      */
     public function __construct(
         public string|array $method,
         public string $uri,
         public ?string $name = null,
         array|string $middleware = [],
+        array $where = null,
     ) {
         $this->middleware = Arr::wrap($middleware);
+        $this->where = $where;
     }
 }
