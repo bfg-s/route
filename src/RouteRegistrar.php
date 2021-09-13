@@ -94,7 +94,7 @@ class RouteRegistrar
                 $invokable_data->responsible ? [$className, $invokable_data->responsible] :
                     $className
             )->middleware($invokable_data->middleware)
-                ->name(static::generate_name($invokable_data->uri, $invokable_data->name));
+                ->name(static::generate_name($uri, $invokable_data->name));
 
             if ($invokable_data->where) {
 
