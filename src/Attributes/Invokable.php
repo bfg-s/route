@@ -36,4 +36,21 @@ class Invokable implements RouteAttribute
     ) {
         $this->middleware = Arr::wrap($middleware);
     }
+
+    /**
+     * @param  string  $class
+     * @return string
+     */
+    public function class_replacer(string $class): string
+    {
+        return $class;
+    }
+
+    /**
+     * @param  string  $class
+     */
+    public function before_add(string $class)
+    {
+
+    }
 }

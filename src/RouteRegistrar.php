@@ -85,8 +85,14 @@ class RouteRegistrar
 
             if ($uri) {
 
-                $uri = str_replace("[class_name]", \Str::snake(class_basename($className)), $uri);
+                $uri = str_replace(
+                    "[class_name]",
+                    $invokable_data->class_replacer(\Str::snake(class_basename($className))),
+                    $uri
+                );
             }
+
+            $invokable_data->before_add($className);
 
             $ir = $this->router->match(
                 Arr::wrap($invokable_data->method),
