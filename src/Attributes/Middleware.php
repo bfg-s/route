@@ -6,7 +6,7 @@ use Attribute;
 use Illuminate\Support\Arr;
 
 /**
- * Class Middleware
+ * Class Middleware.
  * @package Bfg\Route\Attributes
  */
 #[Attribute(Attribute::TARGET_CLASS)]

@@ -6,6 +6,7 @@ This package provides annotations to automatically register routes. Here's a qui
 
 ```php
 use Bfg\Route\Attributes\Get;
+use Bfg\Route\Attributes\Resource;
 
 class MyController
 {
@@ -14,6 +15,12 @@ class MyController
     {
 
     }
+}
+
+#[Resource('my_resource')]
+class MyResourceController
+{
+    ...
 }
 ```
 

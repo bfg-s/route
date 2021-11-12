@@ -8,7 +8,7 @@ use Bfg\Route\Tests\TestClasses\middleware\OtherTestmiddleware;
 use Bfg\Route\Tests\TestClasses\middleware\Testmiddleware;
 
 #[middleware(Testmiddleware::class)]
-class middlewareTestController
+class MiddlewareTestController
 {
     #[Route('get', 'single-middleware')]
     public function singlemiddleware()

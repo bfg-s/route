@@ -5,7 +5,7 @@ namespace Bfg\Route\Attributes;
 use Attribute;
 
 /**
- * Class Domain
+ * Class Domain.
  * @package Bfg\Route\Attributes
  */
 #[Attribute(Attribute::TARGET_CLASS)]
@@ -17,5 +17,6 @@ class Domain implements RouteAttribute
      */
     public function __construct(
         public string $domain
-    ) {}
+    ) {
+    }
 }

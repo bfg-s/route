@@ -5,7 +5,7 @@ namespace Bfg\Route;
 use Illuminate\Support\Facades\Facade as FacadeIlluminate;
 
 /**
- * Class Facade
+ * Class Facade.
  * @package Bfg\Layout
  */
 class Facade extends FacadeIlluminate

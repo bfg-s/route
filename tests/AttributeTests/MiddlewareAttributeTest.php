@@ -7,7 +7,7 @@ use Bfg\Route\Tests\TestClasses\Controllers\middlewareTestController;
 use Bfg\Route\Tests\TestClasses\middleware\OtherTestmiddleware;
 use Bfg\Route\Tests\TestClasses\middleware\Testmiddleware;
 
-class middlewareAttributeTest extends TestCase
+class MiddlewareAttributeTest extends TestCase
 {
     /** @test */
     public function it_can_apply_middleware_on_each_method_of_a_controller()

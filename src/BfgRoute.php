@@ -5,17 +5,18 @@ namespace Bfg\Route;
 use Illuminate\Routing\Router;
 
 /**
- * Class BfgRoute
+ * Class BfgRoute.
  * @package Bfg\Route
  */
 class BfgRoute
 {
     public function __construct(
         protected Router $router
-    ) {}
+    ) {
+    }
 
     /**
-     * Find routers in controller classes
+     * Find routers in controller classes.
      * @param  string  $path  Path for search attributes, you can use class namespaces, directories and file paths
      * @param  \Illuminate\Routing\RouteRegistrar  $registrar
      * @return \Illuminate\Routing\Route|\Illuminate\Routing\RouteRegistrar
@@ -28,29 +29,16 @@ class BfgRoute
         $routeRegistrar = (new RouteRegistrar($registrar ?? $this->router));
 
         if (RouteServiceProvider::isEnabled()) {
-
             if (is_array($path)) {
-
                 foreach ($path as $item) {
-
                     $this->find($item, $registrar ?? $this->router);
                 }
-            }
-
-            else {
-
+            } else {
                 if (is_dir($path)) {
-
                     $routeRegistrar->registerDirectory($path);
-                }
-
-                else if (is_file($path)) {
-
+                } elseif (is_file($path)) {
                     $routeRegistrar->registerFile($path);
-                }
-
-                else if (class_exists($path)) {
-
+                } elseif (class_exists($path)) {
                     $routeRegistrar->registerClass($path);
                 }
             }

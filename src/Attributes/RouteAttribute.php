@@ -3,7 +3,9 @@
 namespace Bfg\Route\Attributes;
 
 /**
- * Interface RouteAttribute
+ * Interface RouteAttribute.
  * @package Bfg\Route\Attributes
  */
-interface RouteAttribute {}
+interface RouteAttribute
+{
+}

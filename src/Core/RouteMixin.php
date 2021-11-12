@@ -8,14 +8,14 @@ use Illuminate\Routing\Router;
 use Illuminate\Routing\RouteRegistrar as RouteRegistrarIlluminate;
 
 /**
- * Class RouteMixin
+ * Class RouteMixin.
  * @package Bfg\Route\Core
  * @mixin Router
  */
 class RouteMixin
 {
     /**
-     * Attributable routs
+     * Attributable routs.
      * @return \Closure
      */
     public function find() : \Closure

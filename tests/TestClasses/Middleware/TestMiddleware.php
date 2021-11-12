@@ -5,7 +5,7 @@ namespace Bfg\Route\Tests\TestClasses\middleware;
 use Closure;
 use Illuminate\Http\Request;
 
-class Testmiddleware
+class TestMiddleware
 {
     public function handle(Request $request, Closure $next)
     {

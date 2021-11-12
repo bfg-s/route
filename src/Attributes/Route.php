@@ -2,11 +2,11 @@
 
 namespace Bfg\Route\Attributes;
 
-use Illuminate\Support\Arr;
 use Attribute;
+use Illuminate\Support\Arr;
 
 /**
- * Class Route
+ * Class Route.
  * @package Bfg\Route\Attributes
  */
 #[Attribute(Attribute::TARGET_METHOD)]
@@ -31,7 +31,7 @@ class Route implements RouteAttribute
      * @param  array|null  $where
      */
     public function __construct(
-        public string|array $method,
+        public string | array $method,
         public string $uri,
         public ?string $name = null,
         array|string $middleware = [],

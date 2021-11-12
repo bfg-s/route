@@ -3,13 +3,13 @@
 namespace Bfg\Route\Tests;
 
 use Arr;
+use Bfg\Route\RouteRegistrar;
+use Bfg\Route\RouteServiceProvider;
+use Bfg\Route\Tests\TestClasses\middleware\AnotherTestmiddleware;
+use Bfg\Route\Tests\TestClasses\middleware\OtherTestmiddleware;
 use Illuminate\Routing\Route;
 use Illuminate\Routing\RouteCollection;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Bfg\Route\RouteServiceProvider;
-use Bfg\Route\RouteRegistrar;
-use Bfg\Route\Tests\TestClasses\middleware\AnotherTestmiddleware;
-use Bfg\Route\Tests\TestClasses\middleware\OtherTestmiddleware;
 
 class TestCase extends Orchestra
 {
@@ -41,7 +41,7 @@ class TestCase extends Orchestra
 
     public function getTestPath(string $directory = null): string
     {
-        return __DIR__ . ($directory ? '/' . $directory : '');
+        return __DIR__.($directory ? '/'.$directory : '');
     }
 
     public function assertRegisteredRoutesCount(int $expectedNumber): self
@@ -69,9 +69,7 @@ class TestCase extends Orchestra
 
         $routeRegistered = collect($this->getRouteCollection()->getRoutes())
             ->contains(function (Route $route) use ($name, $middleware, $controllerMethod, $controller, $uri, $httpMethod, $domain, $dump) {
-
                 if ($name === null) {
-
                     $name = RouteRegistrar::generate_name($uri);
                 }
 
@@ -79,7 +77,7 @@ class TestCase extends Orchestra
                     return false;
                 }
 
-                if (str_replace(trim(__DIR__, '/') . '/', '', $route->uri()) !== $uri) {
+                if (str_replace(trim(__DIR__, '/').'/', '', $route->uri()) !== $uri) {
                     return false;
                 }
 

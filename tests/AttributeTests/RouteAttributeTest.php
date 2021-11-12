@@ -2,13 +2,13 @@
 
 namespace Bfg\Route\Tests\AttributeTests;
 
-use Bfg\Route\Tests\TestCase;
 use Bfg\Route\RouteRegistrar;
+use Bfg\Route\Tests\TestCase;
 use Bfg\Route\Tests\TestClasses\Controllers\RouteAttribute\InvokableRouteGetTestController;
 use Bfg\Route\Tests\TestClasses\Controllers\RouteAttribute\RouteGetTestController;
 use Bfg\Route\Tests\TestClasses\Controllers\RouteAttribute\RoutemiddlewareTestController;
-use Bfg\Route\Tests\TestClasses\Controllers\RouteAttribute\RoutePostTestController;
 use Bfg\Route\Tests\TestClasses\Controllers\RouteAttribute\RouteNameTestController;
+use Bfg\Route\Tests\TestClasses\Controllers\RouteAttribute\RoutePostTestController;
 use Bfg\Route\Tests\TestClasses\middleware\Testmiddleware;
 
 class RouteAttributeTest extends TestCase

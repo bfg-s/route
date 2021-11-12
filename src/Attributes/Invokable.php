@@ -6,7 +6,7 @@ use Attribute;
 use Illuminate\Support\Arr;
 
 /**
- * Class Invokable
+ * Class Invokable.
  * @package Bfg\Route\Attributes
  */
 #[Attribute(Attribute::TARGET_CLASS)]
@@ -28,7 +28,7 @@ class Invokable implements RouteAttribute
      */
     public function __construct(
         public string $uri,
-        public string|array $method = ['GET', 'HEAD', 'POST'],
+        public string | array $method = ['GET', 'HEAD', 'POST'],
         public ?string $name = null,
         public ?string $responsible = null,
         array|string $middleware = [],
@@ -51,6 +51,5 @@ class Invokable implements RouteAttribute
      */
     public function before_add(string $class)
     {
-
     }
 }

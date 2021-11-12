@@ -13,7 +13,7 @@ class AnyAttributeTest extends TestCase
         $this->routeRegistrar->registerClass(AnyTestController::class);
 
         $middleware = [
-            "Bfg\Route\Tests\TestClasses\middleware\AnotherTestmiddleware"
+            "Bfg\Route\Tests\TestClasses\middleware\AnotherTestmiddleware",
         ];
 
         $this

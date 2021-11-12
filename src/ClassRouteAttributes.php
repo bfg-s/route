@@ -2,15 +2,15 @@
 
 namespace Bfg\Route;
 
-use Bfg\Route\Attributes\Invokable;
-use ReflectionClass;
 use Bfg\Route\Attributes\Domain;
+use Bfg\Route\Attributes\Invokable;
 use Bfg\Route\Attributes\Middleware;
 use Bfg\Route\Attributes\Prefix;
 use Bfg\Route\Attributes\RouteAttribute;
+use ReflectionClass;
 
 /**
- * Class ClassRouteAttributes
+ * Class ClassRouteAttributes.
  * @package Bfg\Route
  */
 class ClassRouteAttributes
@@ -80,7 +80,6 @@ class ClassRouteAttributes
 
         return $attribute;
     }
-
 
     /**
      * @param  string  $attributeClass

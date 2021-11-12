@@ -5,7 +5,7 @@ namespace Bfg\Route\Attributes;
 use Attribute;
 
 /**
- * Class Delete
+ * Class Delete.
  * @package Bfg\Route\Attributes
  */
 #[Attribute(Attribute::TARGET_METHOD)]

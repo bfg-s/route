@@ -5,29 +5,27 @@ namespace Bfg\Route\Attributes;
 use Attribute;
 
 /**
- * Class Options.
+ * Class Any.
  * @package Bfg\Route\Attributes
  */
-#[Attribute(Attribute::TARGET_METHOD)]
-class Options extends Route
+#[Attribute(Attribute::TARGET_CLASS)]
+class Resource extends Route
 {
     /**
-     * Options constructor.
+     * Any constructor.
      * @param  string  $uri
-     * @param  string|null  $name
      * @param  array|string  $middleware
      * @param  array|null  $where
      */
     public function __construct(
         string $uri,
-        ?string $name = null,
         array|string $middleware = [],
         array $where = null,
     ) {
         parent::__construct(
-            method: 'options',
+            method: 'any',
             uri: $uri,
-            name: $name,
+            name: $uri,
             middleware: $middleware,
             where: $where
         );
