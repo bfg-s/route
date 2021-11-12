@@ -116,7 +116,8 @@ class RouteRegistrar
                 foreach ($attributes as $attribute) {
                     /** @var Resource $attributeClass */
                     $attributeClass = $attribute->newInstance();
-                    $this->router->resource($attributeClass->uri, $className);
+                    $this->router->resource($attributeClass->uri, $className)
+                        ->middleware($attributeClass->middleware);
                     if (method_exists($attributeClass, 'apply')) {
                         $attributeClass->apply($class);
                     }
