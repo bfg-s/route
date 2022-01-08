@@ -62,14 +62,6 @@ class BfgRoute
             $cacheFactory
                 ->set('channels', $channels)
                 ->save();
-        } else {
-
-            $channels = $cacheFactory->get('channels');
-        }
-
-        foreach ($channels as $class => $channel) {
-
-            \Broadcast::channel($channel['channel'],$class,['guards'=>$channel['guard']]);
         }
 
         return $routeRegistrar->route;

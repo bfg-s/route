@@ -38,12 +38,22 @@ class RouteServiceProvider extends IlluminateServiceProvider
          */
         Router::mixin(new RouteMixin);
 
+        $this->app->singleton(CacheFactory::class, fn () => new CacheFactory);
+
         /**
          * Experiment for future.
          */
 //        $this->app->extend(ControllerDispatcherContract::class, function () {
 //            return new ControllerDispatcher(app());
 //        });
+    }
+
+    public function boot()
+    {
+        $cacheFactory = app(CacheFactory::class);
+        foreach ($cacheFactory->get('channels', []) as $class => $channel) {
+            \Broadcast::channel($channel['channel'],$class,['guards'=>$channel['guard']]);
+        }
     }
 
     /**
