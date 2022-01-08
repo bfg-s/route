@@ -83,8 +83,8 @@ class RouteRegistrar
         $classRouteAttributes = new ClassRouteAttributes($class);
 
         if ($channel_data = $classRouteAttributes->channel()) {
-
-            $this->channels[$className] = ['channel' => $channel_data->channel, 'guard' => $channel_data->guard];
+            $channel = str_replace("\\", ".", implode(".", Arr::wrap($channel_data->channel)));
+            $this->channels[$className] = ['channel' => $channel, 'guard' => $channel_data->guard];
 
         } else if ($invokable_data = $classRouteAttributes->invokable()) {
             $uri = $invokable_data->uri;
