@@ -2,7 +2,7 @@
 
 namespace Bfg\Route;
 
-use Bfg\Installer\Providers\InstalledProvider;
+use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 use Bfg\Route\Core\RouteMixin;
 use Illuminate\Routing\Router;
 
@@ -10,7 +10,7 @@ use Illuminate\Routing\Router;
  * Class RouteServiceProvider.
  * @package Bfg\Route
  */
-class RouteServiceProvider extends InstalledProvider
+class RouteServiceProvider extends IlluminateServiceProvider
 {
     /**
      * Enable state
@@ -20,24 +20,18 @@ class RouteServiceProvider extends InstalledProvider
     protected static bool $enabled = false;
 
     /**
-     * Set as installed by default.
-     * @var bool
-     */
-    public bool $installed = true;
-
-    /**
-     * Executed when the provider is registered
-     * and the extension is installed.
+     * Register route settings.
      * @return void
      * @throws \ReflectionException
      */
-    public function installed(): void
+    public function register()
     {
         /**
          * Checks if there is a cache file for the route,
          * if the file exists, scanning is disabled.
          */
-        static::$enabled = ! app()->routesAreCached();
+        static::$enabled = ! app()->routesAreCached()
+            || ! is_file(base_path('bootstrap/cache/route_attributes.php'));
 
         /**
          * Make route mixins.
@@ -45,21 +39,11 @@ class RouteServiceProvider extends InstalledProvider
         Router::mixin(new RouteMixin);
 
         /**
-         * Experimental function.
+         * Experiment for future.
          */
 //        $this->app->extend(ControllerDispatcherContract::class, function () {
 //            return new ControllerDispatcher(app());
 //        });
-    }
-
-    /**
-     * Executed when the provider run method
-     * "boot" and the extension is installed.
-     * @return void
-     */
-    public function run(): void
-    {
-        //
     }
 
     /**

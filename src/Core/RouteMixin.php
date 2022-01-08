@@ -24,6 +24,7 @@ class RouteMixin
          * @param $dir
          * @param  Route|RouteRegistrarIlluminate  $router
          * @return Route|RouteRegistrarIlluminate
+         * @throws \ReflectionException
          */
         return function ($dir, $router = null) {
             /** @var Router $this */

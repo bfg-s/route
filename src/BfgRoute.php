@@ -26,22 +26,50 @@ class BfgRoute
         string|array $path,
         \Illuminate\Routing\Route|\Illuminate\Routing\RouteRegistrar $registrar = null
     ) {
+        if (is_array($path)) {
+            $last = null;
+            foreach ($path as $item) {
+                $last = $this->find($item, $registrar ?? $this->router);
+            }
+            return $last ?: (new RouteRegistrar($registrar ?? $this->router))->route;
+        }
+
         $routeRegistrar = (new RouteRegistrar($registrar ?? $this->router));
 
+        $cacheFactory = app(CacheFactory::class);
+
         if (RouteServiceProvider::isEnabled()) {
-            if (is_array($path)) {
-                foreach ($path as $item) {
-                    $this->find($item, $registrar ?? $this->router);
-                }
-            } else {
-                if (is_dir($path)) {
-                    $routeRegistrar->registerDirectory($path);
-                } elseif (is_file($path)) {
-                    $routeRegistrar->registerFile($path);
-                } elseif (class_exists($path)) {
-                    $routeRegistrar->registerClass($path);
-                }
+
+            if (is_dir($path)) {
+                $routeRegistrar->registerDirectory($path);
+            } elseif (is_file($path)) {
+                $routeRegistrar->registerFile($path);
+            } elseif (class_exists($path)) {
+                $routeRegistrar->registerClass($path);
             }
+
+            $channels = array_merge(
+                $cacheFactory->get('channels', []),
+                $routeRegistrar->channels
+            );
+
+            $channels = array_filter(
+                $channels,
+                'class_exists',
+                ARRAY_FILTER_USE_KEY
+            );
+
+            $cacheFactory
+                ->set('channels', $channels)
+                ->save();
+        } else {
+
+            $channels = $cacheFactory->get('channels');
+        }
+
+        foreach ($channels as $class => $channel) {
+
+            \Broadcast::channel($channel['channel'],$class,['guards'=>$channel['guard']]);
         }
 
         return $routeRegistrar->route;

@@ -24,6 +24,8 @@ class RouteRegistrar
      */
     public $route;
 
+    public array $channels = [];
+
     /**
      * RouteRegistrar constructor.
      * @param  \Illuminate\Routing\Route|\Illuminate\Routing\RouteRegistrar  $router
@@ -80,7 +82,11 @@ class RouteRegistrar
 
         $classRouteAttributes = new ClassRouteAttributes($class);
 
-        if ($invokable_data = $classRouteAttributes->invokable()) {
+        if ($channel_data = $classRouteAttributes->channel()) {
+
+            $this->channels[$className] = ['channel' => $channel_data->channel, 'guard' => $channel_data->guard];
+
+        } else if ($invokable_data = $classRouteAttributes->invokable()) {
             $uri = $invokable_data->uri;
 
             if (method_exists($invokable_data, 'apply')) {
@@ -109,12 +115,11 @@ class RouteRegistrar
                 $ir->where(...$invokable_data->where);
             }
         } else {
-
             $attributes = $class->getAttributes(Resource::class, ReflectionAttribute::IS_INSTANCEOF);
 
             if (count($attributes)) {
                 foreach ($attributes as $attribute) {
-                    /** @var Resource $attributeClass */
+                    /** @var resource $attributeClass */
                     $attributeClass = $attribute->newInstance();
                     $this->router->resource($attributeClass->uri, $className)
                         ->middleware($attributeClass->middleware);

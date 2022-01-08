@@ -7,6 +7,7 @@ use Bfg\Route\Attributes\Invokable;
 use Bfg\Route\Attributes\Middleware;
 use Bfg\Route\Attributes\Prefix;
 use Bfg\Route\Attributes\RouteAttribute;
+use Bfg\Route\Attributes\WebChannel;
 use ReflectionClass;
 
 /**
@@ -75,6 +76,19 @@ class ClassRouteAttributes
     {
         /** @var \Bfg\Route\Attributes\Invokable $attribute */
         if (! $attribute = $this->getAttribute(Invokable::class)) {
+            return false;
+        }
+
+        return $attribute;
+    }
+
+    /**
+     * @return WebChannel|false
+     */
+    public function channel()
+    {
+        /** @var \Bfg\Route\Attributes\WebChannel $attribute */
+        if (! $attribute = $this->getAttribute(WebChannel::class)) {
             return false;
         }
 
