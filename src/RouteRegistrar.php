@@ -83,6 +83,7 @@ class RouteRegistrar
         $classRouteAttributes = new ClassRouteAttributes($class);
 
         if ($channel_data = $classRouteAttributes->channel()) {
+            $channel_data->channel = $channel_data->channel ?: $className;
             $channel = str_replace("\\", ".", implode(".", Arr::wrap($channel_data->channel)));
             $this->channels[$className] = ['channel' => $channel, 'guard' => $channel_data->guard];
 

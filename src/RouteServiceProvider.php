@@ -2,6 +2,7 @@
 
 namespace Bfg\Route;
 
+use Bfg\Route\Console\ChannelMakeCommand;
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 use Bfg\Route\Core\RouteMixin;
 use Illuminate\Routing\Router;
@@ -40,6 +41,10 @@ class RouteServiceProvider extends IlluminateServiceProvider
 
         $this->app->singleton(CacheFactory::class, fn () => new CacheFactory);
 
+        $this->app->extend('command.channel.make', function () {
+            return new ChannelMakeCommand(app('files'));
+        });
+
         /**
          * Experiment for future.
          */
@@ -51,6 +56,7 @@ class RouteServiceProvider extends IlluminateServiceProvider
     public function boot()
     {
         $cacheFactory = app(CacheFactory::class);
+
         foreach ($cacheFactory->get('channels', []) as $class => $channel) {
             \Broadcast::channel($channel['channel'],$class,['guards'=>$channel['guard']]);
         }

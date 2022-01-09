@@ -13,11 +13,11 @@ use Illuminate\Support\Arr;
 class SanctumChannel extends WebChannel
 {
     /**
-     * @param  string|array  $channel
+     * @param  string|array|null  $channel
      * @param  string|array  $guard
      */
     public function __construct(
-        public string | array $channel,
+        public string | array | null $channel = null,
         public string | array $guard = "sanctum",
     ) {}
 }
