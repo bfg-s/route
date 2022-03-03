@@ -44,6 +44,9 @@ class RouteServiceProvider extends IlluminateServiceProvider
         $this->app->extend('command.channel.make', function () {
             return new ChannelMakeCommand(app('files'));
         });
+        $this->app->extend(\Illuminate\Foundation\Console\ChannelMakeCommand::class, function () {
+            return new ChannelMakeCommand(app('files'));
+        });
 
         /**
          * Experiment for future.
